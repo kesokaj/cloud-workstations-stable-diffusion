@@ -1,5 +1,7 @@
 FROM debian:stable-slim
 
+EXPOSE 8080
+
 ENV LOCAL_USER="user"
 ENV WORKSPACE="/workspace"
 ENV SD_INSTALL_DIR="/usr/local/stable-diffusion"
@@ -27,7 +29,6 @@ USER ${LOCAL_USER}
 WORKDIR /usr/local/stable-diffusion
 RUN wget -q https://raw.githubusercontent.com/AUTOMATIC1111/stable-diffusion-webui/master/webui.sh
 RUN chmod a+x webui.sh
-RUN ./webui.sh --skip-torch-cuda-test --precision full --no-half --share --listen
 
 WORKDIR ${WORKSPACE}
-#CMD [ "executable" ]
+ENTRYPOINT [ "/bin/sh", "-c", "/usr/local/stable-diffusion/webui.sh --skip-torch-cuda-test --precision full --no-half --share --listen --port 8080" ]
