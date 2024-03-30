@@ -1,5 +1,7 @@
 FROM debian:stable-slim
 
+LABEL org.opencontainers.image.source=https://github.com/kesokaj/stable-diffusion-ui-dockerfile
+
 EXPOSE 8080
 
 ENV LOCAL_USER="user"
