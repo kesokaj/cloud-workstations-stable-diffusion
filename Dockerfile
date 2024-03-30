@@ -31,4 +31,4 @@ RUN wget -q https://raw.githubusercontent.com/AUTOMATIC1111/stable-diffusion-web
 RUN chmod a+x webui.sh
 
 WORKDIR ${WORKSPACE}
-ENTRYPOINT [ "/bin/sh", "-c", "/usr/local/stable-diffusion/webui.sh --skip-torch-cuda-test --precision full --no-half --share --listen --port 8080" ]
+ENTRYPOINT [ "/bin/sh", "-c", "/usr/local/stable-diffusion/webui.sh --skip-torch-cuda-test --precision full --no-half --listen --port 8080" ]
