@@ -7,6 +7,8 @@ ENV SHARED_GROUP="users"
 ENV SD_INSTALL_DIR="/current"
 ENV LOCAL_USER="shelly"
 ENV EXPOSE_PORT="8080"
+ENV NVIDIA_VISIBLE_DEVICES="all"
+ENV NVIDIA_DRIVER_CAPABILITIES="all"
 
 RUN apt-get update && apt-get install -y \
     wget \
@@ -24,7 +26,9 @@ RUN apt-get update && apt-get install -y \
     vim \
     apt-transport-https \
     ca-certificates \
-    gnupg    
+    gnupg \
+    nvidia-driver-535-server \
+    cuda-toolkit   
 
 # Add docker-ce
 RUN curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-ce.gpg && \
