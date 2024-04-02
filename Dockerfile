@@ -1,5 +1,5 @@
 #FROM debian:bullseye-slim
-FROM ubuntu:jammy
+FROM nvidia/cuda:12.3.2-cudnn9-runtime-ubuntu22.04
 
 LABEL org.opencontainers.image.source="https://github.com/kesokaj/stable-diffusion-ui-dockerfile"
 
