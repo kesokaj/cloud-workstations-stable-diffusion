@@ -9,6 +9,7 @@ ENV LOCAL_USER="shelly"
 ENV EXPOSE_PORT="8080"
 ENV NVIDIA_VISIBLE_DEVICES="all"
 ENV NVIDIA_DRIVER_CAPABILITIES="all"
+ENV DEBIAN_FRONTEND="noninteractive"
 
 RUN apt-get update && apt-get install -y \
     wget \
