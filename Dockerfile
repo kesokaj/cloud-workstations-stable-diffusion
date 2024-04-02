@@ -1,13 +1,13 @@
 #FROM debian:bullseye-slim
 FROM ubuntu:jammy
 
-LABEL org.opencontainers.image.source=https://github.com/kesokaj/stable-diffusion-ui-dockerfile
+LABEL org.opencontainers.image.source="https://github.com/kesokaj/stable-diffusion-ui-dockerfile"
 
 EXPOSE 8080
 
-ENV LOCAL_USER="user"
-ENV WORKSPACE="/workspace"
+ENV SHARED_GROUP="users"
 ENV SD_INSTALL_DIR="/current"
+ENV LOCAL_USER="shelly"
 
 RUN apt-get update && apt-get install -y \
     wget \
@@ -19,16 +19,29 @@ RUN apt-get update && apt-get install -y \
     python-is-python3 \
     google-perftools \
     bc \
-    apt-utils
+    apt-utils \
+    sudo \
+    openssh-server \
+    vim \
+    apt-transport-https \
+    ca-certificates \
+    gnupg    
 
-RUN mkdir -p ${WORKSPACE}
-RUN mkdir -p ${SD_INSTALL_DIR}
+# Add docker-ce
+RUN curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-ce.gpg && \
+    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-ce.gpg] https://download.docker.com/linux/ubuntu jammy stable" | tee /etc/apt/sources.list.d/docker-ce.list
 
-RUN useradd -rm -d /home/${LOCAL_USER} -s /bin/bash -G sudo -u 666 ${LOCAL_USER}
+# Add google-sdk & gcsfuse
+RUN curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /usr/share/keyrings/cloud-google.gpg && \
+    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/cloud-google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && \
+    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/cloud-google.gpg] https://packages.cloud.google.com/apt gcsfuse-bionic main" | tee -a /etc/apt/sources.list.d/gcsfuse.list
+
+RUN apt-get update && apt-get install -y \
+    google-cloud-cli \
+    gcsfuse
+
+RUN useradd -rm -d ${SD_INSTALL_DIR} -s /bin/bash -G sudo,users -u 666 ${LOCAL_USER}
 RUN echo "${LOCAL_USER} ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
-
-RUN chgrp -R ${LOCAL_USER} ${WORKSPACE} && chmod -R 755 ${WORKSPACE} && chown -R ${LOCAL_USER}:sudo ${WORKSPACE}
-RUN chgrp -R ${LOCAL_USER} ${SD_INSTALL_DIR} && chmod -R 755 ${SD_INSTALL_DIR} && chown -R ${LOCAL_USER}:sudo ${SD_INSTALL_DIR}
 
 USER ${LOCAL_USER}
 WORKDIR ${SD_INSTALL_DIR}
@@ -36,5 +49,6 @@ RUN wget -q https://raw.githubusercontent.com/AUTOMATIC1111/stable-diffusion-web
 RUN chmod a+x webui.sh
 RUN ./webui.sh --skip-torch-cuda-test --precision full --no-half --exit
 
-WORKDIR ${WORKSPACE}
-ENTRYPOINT [ "/bin/sh", "-c", "${SD_INSTALL_DIR}/webui.sh --skip-torch-cuda-test --precision full --no-half --listen --port 8080" ]
+COPY init.sh init.sh
+RUN sudo chmod a+x init.sh
+ENTRYPOINT [ "/current/init.sh" ]
