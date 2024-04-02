@@ -1,4 +1,5 @@
-FROM debian:stable-slim
+#FROM debian:bullseye-slim
+FROM ubuntu:jammy
 
 LABEL org.opencontainers.image.source=https://github.com/kesokaj/stable-diffusion-ui-dockerfile
 
@@ -17,7 +18,8 @@ RUN apt-get update && apt-get install -y \
     libglib2.0-0 \
     python-is-python3 \
     google-perftools \
-    bc
+    bc \
+    apt-utils
 
 RUN mkdir -p ${WORKSPACE}
 RUN mkdir -p ${SD_INSTALL_DIR}
