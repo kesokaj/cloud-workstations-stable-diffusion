@@ -1,5 +1,5 @@
-#FROM debian:bullseye-slim
-FROM nvidia/cuda:12.3.2-cudnn9-runtime-ubuntu22.04
+
+FROM nvidia/cuda:12.1.0-base-ubuntu22.04
 
 LABEL org.opencontainers.image.source="https://github.com/kesokaj/stable-diffusion-ui-dockerfile"
 
@@ -11,7 +11,7 @@ ENV NVIDIA_VISIBLE_DEVICES="all"
 ENV NVIDIA_DRIVER_CAPABILITIES="all"
 ENV DEBIAN_FRONTEND="noninteractive"
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     wget \
     git \
     python3 \
@@ -28,8 +28,15 @@ RUN apt-get update && apt-get install -y \
     apt-transport-https \
     ca-certificates \
     gnupg \
-    nvidia-driver-535-server \
-    cuda-toolkit   
+    dkms \
+    build-essential \
+    gcc
+
+WORKDIR /tmp
+
+# Add nvidia stuff
+RUN wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb && \
+    dpkg -i cuda-keyring_1.1-1_all.deb
 
 # Add docker-ce
 RUN curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-ce.gpg && \
@@ -40,7 +47,7 @@ RUN curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dea
     echo "deb [arch=amd64 signed-by=/usr/share/keyrings/cloud-google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && \
     echo "deb [arch=amd64 signed-by=/usr/share/keyrings/cloud-google.gpg] https://packages.cloud.google.com/apt gcsfuse-bionic main" | tee -a /etc/apt/sources.list.d/gcsfuse.list
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     google-cloud-cli \
     gcsfuse
 

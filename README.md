@@ -3,10 +3,10 @@
 docker build -t stable-diffusion .
 
 # with cpu 
-docker run -it -e USE_NVIDIA=false -p 8080:8080 stable-diffusion
+docker run -it --privileged -e USE_NVIDIA=false -p 8080:8080 stable-diffusion
 
 # with nvidia
-docker run -it --gpus=all -p 8080:8080 stable-diffusion
+docker run -it --gpus=all --privileged -p 8080:8080 stable-diffusion
 
 # Environment variables
 USE_NVIDIA=(true/false) true is default

@@ -20,6 +20,3 @@ if [[ $use_nvidia == "true" ]]; then
 else
     /current/webui.sh --skip-torch-cuda-test --precision full --no-half --listen --port ${EXPOSE_PORT}
 fi
-
-
-sleep infinity
