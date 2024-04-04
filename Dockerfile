@@ -1,14 +1,13 @@
 
-FROM nvidia/cuda:12.1.0-base-ubuntu22.04
+FROM us-docker.pkg.dev/deeplearning-platform-release/gcr.io/base-cu121.py310
 
 LABEL org.opencontainers.image.source="https://github.com/kesokaj/stable-diffusion-ui-dockerfile"
 
 ENV SHARED_GROUP="users"
 ENV SD_INSTALL_DIR="/current"
 ENV LOCAL_USER="shelly"
-ENV EXPOSE_PORT="8080"
-ENV NVIDIA_VISIBLE_DEVICES="all"
-ENV NVIDIA_DRIVER_CAPABILITIES="all"
+ENV LOCAL_PASSWORD="banana"
+ENV EXPOSE_PORT="80"
 ENV DEBIAN_FRONTEND="noninteractive"
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -18,8 +17,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-venv \
     libgl1 \
     libglib2.0-0 \
-    python-is-python3 \
     google-perftools \
+    python-is-python3 \
     bc \
     apt-utils \
     sudo \
@@ -32,22 +31,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     gcc
 
+RUN apt-get install -y \
+    nvidia-driver-525-server
+
+RUN apt-get install -y \
+    cudnn cuda-toolkit
+
 WORKDIR /tmp
 
-# Add docker-ce
-RUN curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-ce.gpg && \
-    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-ce.gpg] https://download.docker.com/linux/ubuntu jammy stable" | tee /etc/apt/sources.list.d/docker-ce.list
-
-# Add google-sdk & gcsfuse
-RUN curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /usr/share/keyrings/cloud-google.gpg && \
-    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/cloud-google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && \
-    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/cloud-google.gpg] https://packages.cloud.google.com/apt gcsfuse-bionic main" | tee -a /etc/apt/sources.list.d/gcsfuse.list
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    google-cloud-cli \
-    gcsfuse
-
 RUN useradd -rm -d ${SD_INSTALL_DIR} -s /bin/bash -G sudo,users -u 666 ${LOCAL_USER}
+RUN echo "${LOCAL_USER}}\n${LOCAL_USER}}" | passwd ${LOCAL_USER}
 RUN echo "${LOCAL_USER} ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 USER ${LOCAL_USER}
@@ -56,6 +49,7 @@ RUN mkdir -p bucket
 RUN wget -q https://raw.githubusercontent.com/AUTOMATIC1111/stable-diffusion-webui/master/webui.sh
 RUN chmod a+x webui.sh
 RUN ./webui.sh --skip-torch-cuda-test --precision full --no-half --xformers --exit
+RUN pip3 install torch
 
 COPY init.sh init.sh
 RUN sudo chmod a+x init.sh
