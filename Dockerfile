@@ -31,12 +31,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     gcc
 
-#RUN apt-get install -y \
-#    nvidia-driver-525-server
-
-#RUN apt-get install -y \
-#    cudnn cuda-toolkit
-
 WORKDIR /tmp
 
 RUN useradd -rm -d ${SD_INSTALL_DIR} -s /bin/bash -G sudo,users -u 666 ${LOCAL_USER}
