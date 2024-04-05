@@ -31,11 +31,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     gcc
 
-RUN apt-get install -y \
-    nvidia-driver-525-server
+#RUN apt-get install -y \
+#    nvidia-driver-525-server
 
-RUN apt-get install -y \
-    cudnn cuda-toolkit
+#RUN apt-get install -y \
+#    cudnn cuda-toolkit
 
 WORKDIR /tmp
 
