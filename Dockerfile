@@ -26,6 +26,7 @@ RUN mkdir -p bucket
 RUN wget -q https://raw.githubusercontent.com/AUTOMATIC1111/stable-diffusion-webui/master/webui.sh
 RUN chmod a+x webui.sh
 RUN ./webui.sh --skip-torch-cuda-test --precision full --no-half --xformers --exit
+RUN pip3 install torch
 
 COPY init.sh init.sh
 RUN sudo chmod a+x init.sh
