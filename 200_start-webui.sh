@@ -2,7 +2,7 @@
 
 set -eoux pipefail
 
-cuda_status=$(python -c 'import torch; print(torch.cuda.is_available())')
+cuda_status=$(python3 -c 'import torch; print(torch.cuda.is_available())')
 
 if [[ $cuda_status == "True" ]]; then
     nvidia-smi
