@@ -8,7 +8,6 @@ if [ ! -f webui.sh ]; then
 fi
 
 if command -v nvidia-smi >/dev/null 2>&1; then
-    nvidia-smi
     runuser -l user -c './webui.sh --xformers --listen --port 80 &'
 else
     runuser -l user -c '/webui.sh --skip-torch-cuda-test --precision full --no-half --listen --port 80 &'

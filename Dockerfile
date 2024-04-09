@@ -3,13 +3,14 @@ FROM us-central1-docker.pkg.dev/cloud-workstations-images/predefined/base:latest
 LABEL org.opencontainers.image.source="https://github.com/kesokaj/stable-diffusion-ui-dockerfile"
 
 ENV DEBIAN_FRONTEND="noninteractive"
+ENV CUDA_VISIBLE_DEVICES=1
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libgl1 \
     libglib2.0-0 \
     google-perftools \
-    nvidia-utils-535-server \
     bc \
+    nvidia-driver-535-server \
     python3-pip \
     python-is-python3
 
