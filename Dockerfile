@@ -14,10 +14,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-pip \
     python-is-python3
 
-WORKDIR /tmp
-
 RUN wget -q https://raw.githubusercontent.com/AUTOMATIC1111/stable-diffusion-webui/master/webui.sh
 RUN chmod a+x webui.sh
 RUN pip3 install torch
+
+COPY 120_start-gcsfuse.sh /etc/workstation-startup.d/
+COPY 200_start-webui.sh /etc/workstation-startup.d/
+RUN chmod a+x /etc/workstation-startup.d/*
 
 EXPOSE ${EXPOSE_PORT}
