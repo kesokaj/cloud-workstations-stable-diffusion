@@ -13,8 +13,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-pip \
     python-is-python3
 
-RUN pip3 install --upgrade pip
-
 COPY 120_start-gcsfuse.sh /etc/workstation-startup.d/
 COPY 200_start-webui.sh /etc/workstation-startup.d/
 RUN chmod a+x /etc/workstation-startup.d/*
