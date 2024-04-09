@@ -28,7 +28,7 @@ docker run -it --privileged -p 8080:8080  \
 
 
 
-### Remake with
+### 
 us-central1-docker.pkg.dev/cloud-workstations-images/predefined/base:latest
 https://cloud.google.com/workstations/docs/preconfigured-base-images
 
