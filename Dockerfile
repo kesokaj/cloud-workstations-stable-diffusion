@@ -3,7 +3,6 @@ FROM us-central1-docker.pkg.dev/cloud-workstations-images/predefined/base:latest
 LABEL org.opencontainers.image.source="https://github.com/kesokaj/stable-diffusion-ui-dockerfile"
 
 ENV DEBIAN_FRONTEND="noninteractive"
-ENV CUDA_VISIBLE_DEVICES=1
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libgl1 \
