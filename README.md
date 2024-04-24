@@ -41,7 +41,7 @@ docker tag SOURCE-IMAGE LOCATION-docker.pkg.dev/PROJECT-ID/REPOSITORY/IMAGE:TAG
 docker push LOCATION-docker.pkg.dev/PROJECT-ID/REPOSITORY/IMAGE
 ````
 
-## Create a Cloud Workstation
+## Create a Cloud Workstation (add GPU if you want to accelerate creation)
 https://cloud.google.com/workstations/docs/create-workstation
 
 ## URLs
