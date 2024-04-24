@@ -1,7 +1,5 @@
 FROM us-central1-docker.pkg.dev/cloud-workstations-images/predefined/base:latest
 
-LABEL org.opencontainers.image.source="https://github.com/kesokaj/cloud-workstations-stable-diffusion"
-
 ENV DEBIAN_FRONTEND="noninteractive"
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
