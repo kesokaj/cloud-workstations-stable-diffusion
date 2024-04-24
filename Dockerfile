@@ -1,6 +1,6 @@
 FROM us-central1-docker.pkg.dev/cloud-workstations-images/predefined/base:latest
 
-LABEL org.opencontainers.image.source="https://github.com/kesokaj/stable-diffusion-ui-dockerfile"
+LABEL org.opencontainers.image.source="https://github.com/kesokaj/cloud-workstations-stable-diffusion"
 
 ENV DEBIAN_FRONTEND="noninteractive"
 
